@@ -1,0 +1,41 @@
+{% extends 'main/base.html' %}
+{% block content %}
+<div class="card-style mb-30">
+    <h6 class="mb-15">Event Form</h6>
+    
+    <p class="text-sm mb-25">
+      <a href="{% url 'events:my-events' %}"> <- Back to events </a>
+    </p>
+    
+    <form  method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+      <div class="row">
+        <div class="col-12 p-2">
+          <div class="input-style-1">
+            {{form}}
+          </div>
+        </div>
+        
+        <!-- end col -->
+        <div class="col-12">
+          <div class=" button-group d-flex justify-content-center flex-wrap">
+            <button
+              class="
+                main-btn
+                primary-btn
+                btn-hover
+                w-100
+                text-center
+              "
+            >
+              Submit
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- end row -->
+    </form>
+  </div>
+
+
+{% endblock %}

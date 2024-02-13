@@ -1,0 +1,191 @@
+{% extends 'main/base.html' %}
+{% block content %}
+{% load static %}
+
+<div class="container-fluid">
+    <!-- ========== title-wrapper start ========== -->
+    <div class="title-wrapper pt-30">
+      <div class="row align-items-center">
+        <div class="col-md-6">
+          <div class="title mb-30">
+            <h2>{{event.title}}</h2>
+          </div>
+        </div>
+        <!-- end col -->
+        <div class="col-md-6">
+          <div class="breadcrumb-wrapper mb-30">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                  <a href="/">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                  Event
+                </li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+        <!-- end col -->
+      </div>
+      <!-- end row -->
+    </div>
+    <!-- ========== title-wrapper end ========== -->
+
+    <div class="row">
+      <div class="col-xxl-9 col-lg-8">
+        <div class="client-profile-wrapper mb-30">
+          <div class="client-cover">
+            <img
+              src="{% static 'assets/images/clients/clients-cover.jpg' %}"
+              alt="cover-image"
+            />
+            
+          </div>
+          <div class="client-profile-photo">
+            <div class="image">
+              <img
+                src="{{event.featured_image.url}}"
+                alt="profile"
+              />
+            </div>
+            <div class="profile-meta text-center pt-25">
+              <h5 class="text-bold mb-10">Organizer : {{event.organizer}}</h5>
+              <p class="text-sm">  {{event.organizer.first_name}} </p>
+            </div>
+          </div>
+          <div class="client-info">
+            <h5 class="text-bold mb-15">About Event</h5>
+            <p class="text-sm mb-20">
+            {{event.description}}
+              <!-- <a href="#0" class="text-medium text-dark">[Read More]</a> -->
+            </p>
+
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#RegisterEvent">
+                Register Now
+            </button>
+            
+          </div>
+        </div>
+      </div>
+      <!-- end col -->
+      <div class="col-xxl-3 col-lg-4">
+        <div class="row">
+          <div class="col-sm-6 col-lg-12">
+            <div class="icon-card mb-30">
+              <div class="icon purple">
+                <i class="lni lni-checkmark"></i>
+              </div>
+              <div class="content">
+                <h6 class="mb-10">Last Registration Day</h6>
+                <h3 class="text-bold">{{event.registration_deadline}}</h3>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-12">
+            <div class="icon-card mb-30">
+              <div class="icon success">
+                <i class="lni lni-checkmark"></i>
+              </div>
+              <div class="content">
+                <h6 class="mb-10">Event Day </h6>
+                <h3 class="text-bold">{{event.event_day}}</h3>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-12">
+            <div class="icon-card mb-30">
+              <div class="icon primary">
+                <i class="lni lni-checkmark"></i>
+              </div>
+              <div class="content">
+                <h6 class="mb-10">Location</h6>
+                <h3 class="text-bold">{{event.location}}</h3>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-12">
+            <div class="icon-card mb-30">
+              <div class="icon orange">
+                <i class="lni lni-star"></i>
+              </div>
+              <div class="content">
+                <h6 class="mb-10">People Registerd Till Now</h6>
+                <h3 class="text-bold">{{event.eventParticipants.all.count}}</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- end col -->
+    </div>
+    <!-- end row -->
+
+  </div>
+
+
+
+<!-- Registratio Modal Here -->
+
+
+<!-- Button trigger modal -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="RegisterEvent" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p> Click On Register if you detials are correct will connect with you soon </p>
+        <small>Otherwise update your details from your profile</small> <br>
+        <hr>
+         <strong>Name:  </strong> {{request.user.first_name | capfirst }}  {{request.user.last_name | capfirst }} <br>
+         <strong>Phone: </strong> {{request.user.phone}}
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+        <input type="hidden" value="{{event.id}}" name="event_id">
+        <button type="button" type="submit" id="event-registration" class="btn btn-primary">Yes! Register</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 
+End Regsitration HERE -->
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var registerButton = document.getElementById('event-registration');
+        registerButton.addEventListener('click', function() {
+            console.log("clicked")
+            var eventId = document.querySelector('input[name="event_id"]').value;
+            var query = 'yes'; // Assuming security token here 
+            
+            // AJAX call to perform event registration
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', '/api/event-registration/?query=' + query + '&event_id=' + eventId, true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.status === 'success') {
+                        // Registration successful
+                        alert('Registration successful!');
+                        window.location.reload()
+                    } else {
+                        // Something went wrong
+                        alert(response.status);
+                        window.location.reload()
+                    }
+                }
+            };
+            xhr.send();
+        });
+    });
+    </script>
+
+{% endblock %}

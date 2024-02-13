@@ -1,0 +1,107 @@
+{% extends 'main/base.html' %}
+{% block content %}
+
+<div class="container-fluid">
+    <!-- ========== title-wrapper start ========== -->
+    <div class="title-wrapper pt-30">
+      <div class="row align-items-center">
+        <div class="col-md-6">
+          <div class="title mb-30">
+            <h2>My Organize Events</h2>
+          </div>
+        </div>
+        <!-- end col -->
+        <div class="col-md-6">
+          <div class="breadcrumb-wrapper mb-30">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                  <a href="#0">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                  Events
+                </li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+        <!-- end col -->
+      </div>
+      <!-- end row -->
+    </div>
+    <!-- ========== title-wrapper end ========== -->
+
+    <!-- ========== tables-wrapper start ========== -->
+    <div class="tables-wrapper">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="card-style mb-30">
+            <a href="{% url 'events:add-event' %}" class="btn btn-primary">+ Add Event</a>
+        
+            <div class="table-wrapper table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th class="lead-info"><h6>Title</h6></th>
+                    <th class="lead-email"><h6>Location</h6></th>
+                    <th class="lead-phone"><h6>Deadline</h6></th>
+                    <th class="lead-company"><h6>Event Day</h6></th>
+                    <th class="lead-company"><h6>Participants</h6></th>
+                    <th class="lead-company"><h6>Status</h6></th>
+                    <th><h6>Action</h6></th>
+                  </tr>
+                  <!-- end table row-->
+                </thead>
+                <tbody>
+                  {% for event in events %}  
+                  <tr>
+                    <td>
+                      <div class="lead">
+                        <div class="lead-text">
+                          <p>{{event.title}}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <p>{{event.location}}</p>
+                    </td>
+                    <td>
+                      <p>{{event.registration_deadline}}</p>
+                    </td>
+                    <td>
+                      <p>{{event.event_day}}</p>
+                    </td>
+                    <td>
+                      <p>
+                        {% if event.eventParticipants.all.count > 0 %}
+                        <a href="{% url 'events:paticipents-view' event.id %}"> {{event.eventParticipants.all.count}} <i class="lni lni-eye"></i></a>
+                        
+                        {% else %}  
+                          No Participants
+                        {% endif %}
+                      
+                      </p>
+                    </td>
+                    <td>
+                      <p>{{event.status}}</p>
+                    </td>
+                    <td><a href="{% url 'events:update-event' event.id %}"><i class="lni lni-pencil"></i></a></td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+              <!-- end table -->
+            </div>
+          </div>
+          <!-- end card -->
+        </div>
+        <!-- end col -->
+      </div>
+      <!-- end row -->
+    </div>
+    <!-- ========== tables-wrapper end ========== -->
+  </div>
+
+
+
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends 'main/base.html' %}
+{% block content %}
+
+<div class="container-fluid">
+    <!-- ========== title-wrapper start ========== -->
+    <div class="title-wrapper pt-30">
+      <div class="row align-items-center">
+        <div class="col-md-6">
+          <div class="title mb-30">
+            <h2>Participants of {{event.title}}</h2>
+          </div>
+        </div>
+        <!-- end col -->
+        <div class="col-md-6">
+          <div class="breadcrumb-wrapper mb-30">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                  <a href="/">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    participants
+                </li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+        <!-- end col -->
+      </div>
+      <!-- end row -->
+    </div>
+    <!-- ========== title-wrapper end ========== -->
+
+    <!-- ========== tables-wrapper start ========== -->
+    <div class="tables-wrapper">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="card-style mb-30">
+            <a href="{% url 'events:my-events' %}" class="btn btn-primary"><- Back To Events</a>
+        
+            <div class="table-wrapper table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th class="lead-info"><h6>Name</h6></th>
+                    <th class="lead-email"><h6>Phone</h6></th>
+                    <th class="lead-phone"><h6>Email</h6></th>
+                    <th class="lead-phone"><h6>Registrtaion Date</h6></th>
+                  </tr>
+                  <!-- end table row-->
+                </thead>
+                <tbody>
+                  {% for p in participants %}  
+                  <tr>
+                    <td>
+                      <div class="lead">
+                        <div class="lead-text">
+                          <p>{{p.user.first_name}}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <p>{{p.user.phone}}</p>
+                    </td>
+                    <td>
+                      <p>{{p.user.email}}</p>
+                    </td>
+                    <td>
+                      <p>{{event.created_at}}</p>
+                    </td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+              <!-- end table -->
+            </div>
+          </div>
+          <!-- end card -->
+        </div>
+        <!-- end col -->
+      </div>
+      <!-- end row -->
+    </div>
+    <!-- ========== tables-wrapper end ========== -->
+  </div>
+
+
+
+{% endblock %}
